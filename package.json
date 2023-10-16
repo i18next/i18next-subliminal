@@ -1,0 +1,92 @@
+{
+  "name": "i18next-subliminal",
+  "version": "1.0.0",
+  "description": "This package helps to pass meta information via invisible characters for the shown translation resources.",
+  "keywords": [
+    "i18next",
+    "i18next-backend",
+    "i18next-post-processor"
+  ],
+  "homepage": "https://github.com/i18next/i18next-subliminal",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:i18next/i18next-subliminal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/i18next/i18next-subliminal/issues"
+  },
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "browser": "./dist/umd/i18nextSubliminalPlugin.js",
+  "types": "./index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": {
+        "require": "./dist/cjs/index.d.ts",
+        "import": "./dist/esm/index.d.ts"
+      },
+      "module": "./dist/esm/index.js",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/esm/index.js"
+    },
+    "./cjs": {
+      "types": "./dist/cjs/index.d.ts",
+      "default": "./dist/cjs/index.js"
+    },
+    "./esm": {
+      "types": "./dist/esm/index.d.ts",
+      "default": "./dist/esm/index.js"
+    },
+    "./src": {
+      "default": "./src/index.js"
+    }
+  },
+  "scripts": {
+    "lint:javascript": "eslint .",
+    "lint:typescript": "eslint -c .ts.eslintrc *.d.ts test/types/**/*.test-d.ts",
+    "lint": "npm run lint:javascript && npm run lint:typescript",
+    "build": "rm -rf dist && rollup -c && echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json && cp index.d.ts dist/cjs/index.d.ts && cp index.d.ts dist/esm/index.d.ts",
+    "test:typescript": "tsd",
+    "test": "npm run lint && mocha --colors --reporter spec --recursive test/*.js",
+    "test:all": "npm run test && npm run test:typescript",
+    "preversion": "npm run test && npm run build && git push",
+    "postversion": "git push && git push --tags"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@babel/runtime": "^7.23.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/plugin-transform-runtime": "^7.23.2",
+    "@babel/preset-env": "^7.23.2",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@types/mocha": "^10.0.2",
+    "@typescript-eslint/eslint-plugin": "^6.7.5",
+    "@typescript-eslint/parser": "^6.7.5",
+    "babel-plugin-add-module-exports": "^1.0.4",
+    "eslint": "^8.51.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-n": "^16.2.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-require-path-exists": "^1.1.9",
+    "eslint-plugin-standard": "^5.0.0",
+    "i18next": "^23.5.1",
+    "mocha": "^10.2.0",
+    "rollup": "^4.1.4",
+    "should": "^13.2.3",
+    "sinon": "^16.1.0",
+    "tsd": "^0.29.0",
+    "typescript": "^5.2.2"
+  },
+  "tsd": {
+    "directory": "test/types"
+  }
+}
