@@ -85,7 +85,7 @@ export function wrap (text, invisibleMeta = {}) {
   // }
   const encodedValue = encodeValue(invisibleMeta)
   const invisibleMark = encodeMessage(encodedValue)
-  return typeof text === 'string' && text ? invisibleMark + text : text
+  return typeof text === 'string' && text ? text + invisibleMark : text
 }
 
 export function unwrap (text) {
@@ -98,7 +98,7 @@ export function unwrap (text) {
 export function containsHiddenMeta (text) {
   if (!text || text.length < 27) return false
   if (!INVISIBLE_REGEX.test(text)) return false
-  const firstByte = text.substring(0, 9)
+  const firstByte = text.substring(text.length - 9)
   const firstChar = decodeMessage(firstByte)
-  return firstChar === '{'
+  return firstChar === '}'
 }
