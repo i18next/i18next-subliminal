@@ -67,7 +67,7 @@ export default [
     output: {
       file: pkg.browser,
       format: 'umd',
-      name: 'i18nextSubliminalPlugin' // the global which can be used in a browser
+      name: 'i18nextSubliminal' // the global which can be used in a browser
     },
     plugins: [commonjs(), babel(getBabelOptions({ useESModules: true })), nodeResolve()]
   },
@@ -76,7 +76,7 @@ export default [
     output: {
       file: pkg.browser.replace('.js', '.min.js'),
       format: 'umd',
-      name: 'i18nextSubliminalPlugin' // the global which can be used in a browser
+      name: 'i18nextSubliminal' // the global which can be used in a browser
     },
     plugins: [commonjs(), babel(getBabelOptions({ useESModules: true })), nodeResolve(), terser()]
   }
