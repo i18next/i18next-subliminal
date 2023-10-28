@@ -103,8 +103,8 @@ export function unwrap (text) {
 export function containsHiddenMeta (text) {
   if (!text || text.length < 27) return false
   if (!INVISIBLE_REGEX.test(text)) return false
-  const firstByte = text.substring(text.length - 9)
-  const lastChar = decodeMessage(firstByte)
+  const lastByte = text.substring(text.length - 9)
+  const lastChar = decodeMessage(lastByte)
   return lastChar === '}'
 }
 
