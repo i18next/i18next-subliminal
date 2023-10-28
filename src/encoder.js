@@ -6,6 +6,9 @@ const INVISIBLE_REGEX = RegExp(
 )
 const TEMPLATE_MINIMUM_LENGTH = '{"k":"a"}'.length
 
+const prependStartMarker = false // setting this to true will potentially add a space before the text, when rendering (for example in the server side console)
+const invisibleStartMarker = 'subliminal:start'
+
 const toBytes = (text) => Array.from(new TextEncoder().encode(text))
 const fromBytes = (bytes) => new TextDecoder().decode(new Uint8Array(bytes))
 
@@ -25,6 +28,8 @@ const encodeMessage = (text) => {
   return result
 }
 
+const encodedInvisibleStartMarker = prependStartMarker ? encodeMessage(invisibleStartMarker) : ''
+
 const decodeMessage = (message) => {
   const binary = Array.from(message)
     .map((character) => {
@@ -42,7 +47,7 @@ const decodeMessage = (message) => {
 const decodeFromText = (text) => {
   const invisibleMessages = text.match(INVISIBLE_REGEX)?.filter((m) => m.length > (TEMPLATE_MINIMUM_LENGTH - 1))
   if (!invisibleMessages || invisibleMessages.length === 0) return
-  return decodeMessage(invisibleMessages[0])
+  return decodeMessage(invisibleMessages[invisibleMessages.length - 1])
 }
 
 const removeInvisibles = (text) => text.replace(INVISIBLE_REGEX, '')
@@ -85,7 +90,7 @@ export function wrap (text, invisibleMeta = {}) {
   // }
   const encodedValue = encodeValue(invisibleMeta)
   const invisibleMark = encodeMessage(encodedValue)
-  return typeof text === 'string' && text ? text + invisibleMark : text
+  return typeof text === 'string' && text ? (encodedInvisibleStartMarker + text + invisibleMark) : text
 }
 
 export function unwrap (text) {
@@ -100,5 +105,6 @@ export function containsHiddenMeta (text) {
   if (!INVISIBLE_REGEX.test(text)) return false
   const firstByte = text.substring(text.length - 9)
   const firstChar = decodeMessage(firstByte)
-  return firstChar === '}'
+  if (firstChar !== '}') return false
+  return text.startsWith(encodedInvisibleStartMarker)
 }
