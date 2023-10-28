@@ -1,5 +1,5 @@
 import should from 'should'
-import { wrap, unwrap, containsHiddenMeta } from '../index.js'
+import { wrap, unwrap, containsHiddenMeta, containsHiddenStartMarker } from '../index.js'
 
 describe('encoder', () => {
   describe('roundtrip', () => {
@@ -17,12 +17,15 @@ describe('encoder', () => {
     })
   })
 
-  describe('containsHiddenMeta', () => {
+  describe('containsHiddenMeta and containsHiddenStartMarker', () => {
     it('should work as expected', async () => {
       const originalText = 'hello world'
       const wrapped = wrap(originalText, { key: 'myk', ns: 'myn', lng: 'myl', source: 'translation' })
       should(containsHiddenMeta(wrapped)).eql(true)
       should(containsHiddenMeta('normal text')).eql(false)
+
+      should(containsHiddenStartMarker(wrapped)).eql(true)
+      should(containsHiddenStartMarker('normal text')).eql(false)
     })
   })
 

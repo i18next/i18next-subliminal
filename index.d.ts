@@ -10,6 +10,7 @@ export type InvisibleMeta = {
 export declare function wrap(text: string, invisibleMeta?: InvisibleMeta): string
 export declare function unwrap(text: string): string
 export declare function containsHiddenMeta(text: string): boolean
+export declare function containsHiddenStartMarker(text: string): boolean
 
 export class PostProcessor implements PostProcessorModule {
   static type: 'postProcessor'

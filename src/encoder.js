@@ -6,7 +6,7 @@ const INVISIBLE_REGEX = RegExp(
 )
 const TEMPLATE_MINIMUM_LENGTH = '{"k":"a"}'.length
 
-const prependStartMarker = false // setting this to true will potentially add a space before the text, when rendering (for example in the server side console)
+const prependStartMarker = true // setting this to true will potentially add a space before the text, when rendering (for example in the server side console)
 const invisibleStartMarker = 'subliminal:start'
 
 const toBytes = (text) => Array.from(new TextEncoder().encode(text))
@@ -104,7 +104,10 @@ export function containsHiddenMeta (text) {
   if (!text || text.length < 27) return false
   if (!INVISIBLE_REGEX.test(text)) return false
   const firstByte = text.substring(text.length - 9)
-  const firstChar = decodeMessage(firstByte)
-  if (firstChar !== '}') return false
+  const lastChar = decodeMessage(firstByte)
+  return lastChar === '}'
+}
+
+export function containsHiddenStartMarker (text) {
   return text.startsWith(encodedInvisibleStartMarker)
 }
