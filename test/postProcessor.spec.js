@@ -14,7 +14,8 @@ describe('postProcessor', () => {
           en: {
             translation: {
               key: 'Hello world!',
-              key2: 'Lorem ipsum dolor sit amet'
+              key2: 'Lorem ipsum dolor sit amet',
+              key3: 'hi {{name}}'
             }
           }
         }
@@ -26,7 +27,8 @@ describe('postProcessor', () => {
       { args: ['key'], expected: wrap('Hello world!', { key: 'key', ns: 'translation', lng: 'en', source: 'translation' }) },
       { args: ['key2'], expected: wrap('Lorem ipsum dolor sit amet', { key: 'key2', ns: 'translation', lng: 'en', source: 'translation' }) },
       { args: ['no translation in resources'], expected: wrap('no translation in resources', { key: 'no translation in resources', ns: 'translation', lng: 'dev', source: 'key' }) },
-      { args: ['keyd', 'default VALUE'], expected: wrap('default VALUE', { key: 'keyd', ns: 'translation', lng: 'dev', source: 'default' }) }
+      { args: ['keyd', 'default VALUE'], expected: wrap('default VALUE', { key: 'keyd', ns: 'translation', lng: 'dev', source: 'default' }) },
+      { args: ['key3', 'hi {{name}}', { name: 'John' }], expected: wrap('hi John', { key: 'key3', ns: 'translation', lng: 'en', source: 'translation' }) }
     ]
 
     tests.forEach((test) => {
