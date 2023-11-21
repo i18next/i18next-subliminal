@@ -1,6 +1,6 @@
 {
   "name": "i18next-subliminal",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "This package helps to pass meta information via invisible characters for the shown translation resources.",
   "keywords": [
     "i18next",
