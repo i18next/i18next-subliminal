@@ -1,5 +1,6 @@
+const isBrowser = typeof window !== 'undefined'
 // we need 2 invisible chars to represent 0 and 1 in our binary
-const INVISIBLE_CHARACTERS = ['\u200B', '\u200C'/*, '\u200D' */] // U+200D is somehow shown as some sort of space on command line output
+const INVISIBLE_CHARACTERS = isBrowser ? ['\u200C', '\u200D'] : ['\u200B', '\u200C'] // U+200D is somehow shown as some sort of space on command line output
 const INVISIBLE_REGEX = RegExp(
   `([${INVISIBLE_CHARACTERS.join('')}]{9})+`,
   'gu'
