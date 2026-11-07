@@ -19,12 +19,13 @@ const SubliminalPostProcessor = {
       ns = options.i18nResolved.usedNS
       lng = options.i18nResolved.usedLng
       // params = options.i18nResolved.usedParams
-      if (options.i18nResolved.res === undefined) {
-        if (key !== value) {
-          source = 'default'
-        } else {
-          source = 'key'
-        }
+      const res = options.i18nResolved.res
+      // i18next falls back to the default value or the key when nothing is found, and since v27 also for an
+      // empty string (returnEmptyString: false) and an object without returnObjects
+      const fellBack = res === undefined || res === null || (res === '' && value !== '') ||
+        (typeof res === 'object' && !Array.isArray(res))
+      if (fellBack) {
+        source = key !== value ? 'default' : 'key'
       } else {
         source = 'translation'
       }

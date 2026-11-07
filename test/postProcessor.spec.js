@@ -15,7 +15,10 @@ describe('postProcessor', () => {
             translation: {
               key: 'Hello world!',
               key2: 'Lorem ipsum dolor sit amet',
-              key3: 'hi {{name}}'
+              key3: 'hi {{name}}',
+              empty: '',
+              obj: { a: 'A' },
+              arr: ['one', 'two']
             }
           }
         }
@@ -26,9 +29,14 @@ describe('postProcessor', () => {
     const tests = [
       { args: ['key'], expected: wrap('Hello world!', { key: 'key', ns: 'translation', lng: 'en', source: 'translation' }) },
       { args: ['key2'], expected: wrap('Lorem ipsum dolor sit amet', { key: 'key2', ns: 'translation', lng: 'en', source: 'translation' }) },
-      { args: ['no translation in resources'], expected: wrap('no translation in resources', { key: 'no translation in resources', ns: 'translation', lng: 'dev', source: 'key' }) },
-      { args: ['keyd', 'default VALUE'], expected: wrap('default VALUE', { key: 'keyd', ns: 'translation', lng: 'dev', source: 'default' }) },
-      { args: ['key3', 'hi {{name}}', { name: 'John' }], expected: wrap('hi John', { key: 'key3', ns: 'translation', lng: 'en', source: 'translation' }) }
+      { args: ['no translation in resources'], expected: wrap('no translation in resources', { key: 'no translation in resources', ns: 'translation', lng: 'en', source: 'key' }) },
+      { args: ['keyd', 'default VALUE'], expected: wrap('default VALUE', { key: 'keyd', ns: 'translation', lng: 'en', source: 'default' }) },
+      { args: ['key3', 'hi {{name}}', { name: 'John' }], expected: wrap('hi John', { key: 'key3', ns: 'translation', lng: 'en', source: 'translation' }) },
+      // i18next 27 falls back for an empty string and for an object without returnObjects
+      { args: ['empty'], expected: wrap('empty', { key: 'empty', ns: 'translation', lng: 'en', source: 'key' }) },
+      { args: ['empty', 'default VALUE'], expected: wrap('default VALUE', { key: 'empty', ns: 'translation', lng: 'en', source: 'default' }) },
+      { args: ['obj'], expected: wrap('obj', { key: 'obj', ns: 'translation', lng: 'en', source: 'key' }) },
+      { args: ['arr', { joinArrays: ' ' }], expected: wrap('one two', { key: 'arr', ns: 'translation', lng: 'en', source: 'translation' }) }
     ]
 
     tests.forEach((test) => {
