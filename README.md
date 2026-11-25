@@ -29,7 +29,7 @@ i18next.use(PostProcessor).init({
 ## standalone usage:
 
 ```js
-import { wrap, unwrap, containsHiddenMeta } from 'i18next-subliminal'
+import { wrap, unwrap, unwrapAll, containsHiddenMeta } from 'i18next-subliminal'
 
 const wrapped = wrap('my text', { key: 'my.key', ns: 'my-ns', lng: 'en', source: 'translation' })
 
@@ -38,7 +38,18 @@ unwrapped.text // 'my text'
 unwrapped.invisibleMeta // { key: 'my.key', ns: 'my-ns', lng: 'en', source: 'translation' }
 
 containsHiddenMeta(wrapped) // true
+
+// several wrapped texts in one string (two translations in one text node)
+const both = `${wrap('Hello', { key: 'a' })} ${wrap('World', { key: 'b' })}`
+unwrapAll(both) // [{ text: 'Hello', invisibleMeta: { key: 'a' }, start, end }, { text: 'World', ... }]
+// `start` and `end` span a wrapped text with its markers, to replace just that one
 ```
+
+## the markers
+
+A wrapped text gets a start marker before it and an end marker after it, made of U+2060 (word joiner) and U+2061–U+2064. They draw nothing and allow no line break; text around a whole translation renders as without them. Inside a word they are not neutral: a translation that ends inside an Arabic word breaks the joining at its end marker (markers before 2.0 broke it at both ends), any marker splits an Indic letter cluster it falls into, and a `::first-letter` style (a drop cap) applies to the start marker instead of the first letter, as before 2.0. The end marker carries the meta itself, so a text wrapped on the server (server rendering) is read in the browser.
+
+Since 2.0 markers are about a fifth as long as before. Markers written by older versions in a browser (U+200C/U+200D) are still read, not written. A reader older than 2.0 does not see 2.0 markers at all: upgrade whatever reads them (the [locize](https://github.com/locize/locize) InContext editor from 4.8.0) together with this package.
 
 ---
 

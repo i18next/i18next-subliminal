@@ -1,6 +1,6 @@
 import should from 'should'
 import i18next from 'i18next'
-import { PostProcessor, wrap } from '../index.js'
+import { PostProcessor, wrap, unwrap } from '../index.js'
 
 describe('postProcessor', () => {
   before(() => {
@@ -44,5 +44,20 @@ describe('postProcessor', () => {
         should(i18next.t.apply(i18next, test.args)).eql(test.expected)
       })
     })
+  })
+})
+
+describe('postProcessor without i18nResolved', () => {
+  const translator = {
+    language: 'de',
+    options: { keySeparator: '.' },
+    extractFromKey: (key) => ({ key, namespaces: undefined })
+  }
+
+  it('reads the options of each call, not those of the first one', () => {
+    const first = PostProcessor.process('A', ['a'], { ns: 'first' }, translator)
+    const second = PostProcessor.process('B', ['b'], { ns: 'second', lng: 'fr' }, translator)
+    should(unwrap(first).invisibleMeta).eql({ key: 'a', ns: 'first', lng: 'de', source: 'translation' })
+    should(unwrap(second).invisibleMeta).eql({ key: 'b', ns: 'second', lng: 'fr', source: 'translation' })
   })
 })

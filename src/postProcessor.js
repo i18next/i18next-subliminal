@@ -7,11 +7,13 @@ const SubliminalPostProcessor = {
   options: {},
 
   setOptions (options) {
-    this.options = { ...options, ...this.options }
+    this.options = { ...this.options, ...options }
   },
 
   process (value, keyIn, options, translator) {
-    const opt = this.options = { ...options, ...this.options }
+    // the options of this call win; nothing is kept for the next call (the plugin object is shared
+    // by every i18next instance on the page)
+    const opt = { ...this.options, ...options }
 
     let key, ns, lng, source
     if (options.i18nResolved) {
@@ -37,7 +39,7 @@ const SubliminalPostProcessor = {
       )
       key = extractedKey
       ns = namespaces?.[0] ?? opt.ns ?? translator?.options?.defaultNS
-      lng = options.lng || this.language
+      lng = options.lng || translator?.language
       if (key === value) {
         source = 'key'
       } else {

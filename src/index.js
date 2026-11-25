@@ -1,7 +1,7 @@
 import PostProcessor from './postProcessor.js'
-import { wrap, unwrap, containsHiddenMeta, containsHiddenStartMarker } from './encoder.js'
+import { wrap, unwrap, unwrapAll, containsHiddenMeta, containsHiddenStartMarker } from './encoder.js'
 
 export { PostProcessor, PostProcessor as plugin }
-export { wrap, unwrap, containsHiddenMeta, containsHiddenStartMarker }
+export { wrap, unwrap, unwrapAll, containsHiddenMeta, containsHiddenStartMarker }
 
-export default { wrap, unwrap, containsHiddenMeta, containsHiddenStartMarker, PostProcessor, plugin: PostProcessor }
+export default { wrap, unwrap, unwrapAll, containsHiddenMeta, containsHiddenStartMarker, PostProcessor, plugin: PostProcessor }
